@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LØKD B2B - Team Lock-In Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background: #000;
+            color: #00ff00;
+            min-height: 100vh;
+        }
+
+        .header {
+            padding: 30px 20px;
+            border-bottom: 2px solid #00ff00;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .lock-icon {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .lock-delay-1 {
+            animation-delay: 0.3s;
+        }
+
+        .lock-delay-2 {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-left: 10px;
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            border: 2px solid #00ff00;
+            background: transparent;
+            color: #00ff00;
+            cursor: pointer;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .intro h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #FF4500;
+        }
+
+        .intro p {
+            font-size: 18px;
+            opacity: 0.8;
+        }
+
+        .competitive-banner {
+            background: rgba(255, 69, 0, 0.1);
+            border: 3px solid #FF4500;
+            padding: 30px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .competitive-banner h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #FF4500;
+        }
+
+        .competitive-banner p {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        .leaderboard {
+            background: rgba(0, 255, 0, 0.03);
+            border: 2px solid #00ff00;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .leaderboard-title {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #FF4500;
+            text-align: center;
+        }
+
+        .leaderboard-item {
+            display: grid;
+            grid-template-columns: 60px 1fr 150px 150px 150px;
+            gap: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid rgba(0, 255, 0, 0.3);
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .leaderboard-item:hover {
+            border-color: #00ff00;
+            background: rgba(0, 255, 0, 0.05);
+        }
+
+        .leaderboard-item.rank-1 {
+            border-color: #ffff00;
+            background: rgba(255, 255, 0, 0.05);
+        }
+
+        .leaderboard-item.rank-2 {
+            border-color: #c0c0c0;
+            background: rgba(192, 192, 192, 0.05);
+        }
+
+        .leaderboard-item.rank-3 {
+            border-color: #cd7f32;
+            background: rgba(205, 127, 50, 0.05);
+        }
+
+        .rank {
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            color: #FF4500;
+        }
+
+        .rank-1 .rank { color: #ffff00; }
+        .rank-2 .rank { color: #c0c0c0; }
+        .rank-3 .rank { color: #cd7f32; }
+
+        .employee-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .employee-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .employee-title {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF4500;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        .services-section {
+            margin-bottom: 60px;
+        }
+
+        .services-section h2 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #FF4500;
+        }
+
+        .service-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .service-card {
+            border: 2px solid #00ff00;
+            padding: 25px;
+            background: rgba(0, 255, 0, 0.03);
+            position: relative;
+        }
+
+        .service-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .service-card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FF4500;
+        }
+
+        .adoption-badge {
+            background: #00ff00;
+            color: #000;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .service-card-description {
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .who-uses {
+            font-size: 12px;
+            opacity: 0.7;
+            border-top: 1px solid rgba(0, 255, 0, 0.2);
+            padding-top: 15px;
+        }
+
+        .who-uses strong {
+            color: #FF4500;
+        }
+
+        .cta-section {
+            background: rgba(255, 69, 0, 0.1);
+            border: 3px solid #FF4500;
+            padding: 60px 30px;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #FF4500;
+        }
+
+        .pricing-tiers {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .pricing-tier {
+            border: 2px solid #00ff00;
+            padding: 30px;
+            min-width: 300px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .pricing-tier.featured {
+            border-color: #FF4500;
+            border-width: 3px;
+            transform: scale(1.05);
+        }
+
+        .tier-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #FF4500;
+        }
+
+        .tier-price {
+            font-size: 48px;
+            margin: 20px 0;
+            color: #00ff00;
+        }
+
+        .tier-description {
+            font-size: 14px;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .tier-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .tier-features li {
+            padding: 8px 0;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+        }
+
+        .tier-features li::before {
+            content: '✓ ';
+            color: #00ff00;
+            margin-right: 5px;
+        }
+
+        .tier-button {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #00ff00;
+            background: #00ff00;
+            color: #000;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .tier-button:hover {
+            background: #FF4500;
+            border-color: #FF4500;
+        }
+
+        @media (max-width: 768px) {
+            .leaderboard-item {
+                grid-template-columns: 40px 1fr;
+                gap: 10px;
+            }
+
+            .stat {
+                grid-column: 1 / -1;
+                display: flex;
+                justify-content: space-around;
+            }
+
+            .pricing-tiers {
+                flex-direction: column;
+            }
+
+            .pricing-tier {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <svg class="lock-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z" stroke="#00ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="#00ff00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="16" r="1.5" fill="#00ff00"/>
+            </svg>
+            <div class="logo">LØKD B2B</div>
+        </div>
+        <button class="back-btn" onclick="window.location.href='lokd-landing.html'">← BACK</button>
+    </div>
+
+    <div class="container">
+        <div class="intro">
+            <h1>YOUR TEAM'S LOCK-IN LEADERBOARD</h1>
+            <p>Real-time visibility into who's actually shipping.</p>
+        </div>
+
+        <div class="competitive-banner">
+            <h2>🏆 COMPETITION BREEDS EXCELLENCE</h2>
+            <p>See who's using which services. Your teammates 10x'd because LØKD handled their laundry?<br>
+            Join them. Your teammate automated their entire social life? You can too.</p>
+        </div>
+
+        <div class="leaderboard">
+            <div class="leaderboard-title">CURRENT LOCK-IN RANKINGS</div>
+            
+            <div class="leaderboard-item rank-1">
+                <div class="rank">#1</div>
+                <div class="employee-info">
+                    <div class="employee-name">Sarah Chen</div>
+                    <div class="employee-title">Senior Engineer</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">98%</div>
+                    <div class="stat-label">Lock-In Score</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">18/20</div>
+                    <div class="stat-label">Services Active</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">47hrs</div>
+                    <div class="stat-label">Saved/Week</div>
+                </div>
+            </div>
+
+            <div class="leaderboard-item rank-2">
+                <div class="rank">#2</div>
+                <div class="employee-info">
+                    <div class="employee-name">Marcus Rodriguez</div>
+                    <div class="employee-title">Product Designer</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">95%</div>
+                    <div class="stat-label">Lock-In Score</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">17/20</div>
+                    <div class="stat-label">Services Active</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">44hrs</div>
+                    <div class="stat-label">Saved/Week</div>
+                </div>
+            </div>
+
+            <div class="leaderboard-item rank-3">
+                <div class="rank">#3</div>
+                <div class="employee-info">
+                    <div class="employee-name">Alex Kim</div>
+                    <div class="employee-title">Engineering Manager</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">92%</div>
+                    <div class="stat-label">Lock-In Score</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">16/20</div>
+                    <div class="stat-label">Services Active</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">42hrs</div>
+                    <div class="stat-label">Saved/Week</div>
+                </div>
+            </div>
+
+            <div class="leaderboard-item">
+                <div class="rank">#4</div>
+                <div class="employee-info">
+                    <div class="employee-name">You</div>
+                    <div class="employee-title">Co-Founder</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">87%</div>
+                    <div class="stat-label">Lock-In Score</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">14/20</div>
+                    <div class="stat-label">Services Active</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">38hrs</div>
+                    <div class="stat-label">Saved/Week</div>
+                </div>
+            </div>
+
+            <div class="leaderboard-item">
+                <div class="rank">#5</div>
+                <div class="employee-info">
+                    <div class="employee-name">Jamie Patel</div>
+                    <div class="employee-title">Data Scientist</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">84%</div>
+                    <div class="stat-label">Lock-In Score</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">13/20</div>
+                    <div class="stat-label">Services Active</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">35hrs</div>
+                    <div class="stat-label">Saved/Week</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="services-section">
+            <h2>SERVICES YOUR TEAMMATES ARE USING</h2>
+            <div class="service-cards">
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <div class="service-card-title">LAUNDRY SERVICE</div>
+                        <div class="adoption-badge">4/5 USING</div>
+                    </div>
+                    <div class="service-card-description">
+                        TaskRabbit picks up weekly, we handle laundromat, TaskRabbit delivers back. Your teammates automated this weeks ago.
+                    </div>
+                    <div class="who-uses">
+                        <strong>Sarah</strong> joined 2 weeks ago. Output increased 23%.<br>
+                        <strong>Marcus</strong> joined last week. Ships faster now.<br>
+                        <strong>Alex</strong> activated yesterday. Already more focused.
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <div class="service-card-title">HYGIENE SCHEDULING</div>
+                        <div class="adoption-badge">3/5 USING</div>
+                    </div>
+                    <div class="service-card-description">
+                        Google Home yells at you to brush teeth and shower. Twice daily. Your teammates never skip anymore.
+                    </div>
+                    <div class="who-uses">
+                        <strong>Sarah</strong> never misses morning routine now.<br>
+                        <strong>Marcus</strong> says it's better than his mom's reminders.<br>
+                        <strong>You could be here.</strong>
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <div class="service-card-title">YOUTUBE DECISION ENGINE</div>
+                        <div class="adoption-badge">5/5 USING</div>
+                    </div>
+                    <div class="service-card-description">
+                        15-min break content picked for you. Only founder podcasts, YC videos, tech talks. No distractions.
+                    </div>
+                    <div class="who-uses">
+                        <strong>EVERYONE</strong> on your team is using this.<br>
+                        Zero entertainment. Pure grind content. Always learning.
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <div class="service-card-title">MEAL AUTOMATION</div>
+                        <div class="adoption-badge">5/5 USING</div>
+                    </div>
+                    <div class="service-card-description">
+                        Zero meal decisions. DoorDash delivers optimized nutrition to office or home based on calendar and dietary restrictions.
+                    </div>
+                    <div class="who-uses">
+                        <strong>EVERYONE</strong> on your team is using this.<br>
+                        7 hours per week saved. No one thinks about food anymore.
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <div class="service-card-title">HOUSEHOLD ESSENTIALS</div>
+                        <div class="adoption-badge">5/5 USING</div>
+                    </div>
+                    <div class="service-card-description">
+                        3-in-1 everything, research-backed toothbrush, Lume deodorant. Amazon auto-ships weekly. Never run out.
+                    </div>
+                    <div class="who-uses">
+                        <strong>100% adoption.</strong> No one's been to a drugstore in months.<br>
+                        Hotel-style efficiency for your entire team.
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-card-header">
+                        <div class="service-card-title">RELATIONSHIP MANAGER</div>
+                        <div class="adoption-badge">2/5 USING</div>
+                    </div>
+                    <div class="service-card-description">
+                        AI handles birthday gifts, anniversaries. You get credit, relationships stay intact.
+                    </div>
+                    <div class="who-uses">
+                        <strong>Marcus</strong> activated after forgetting his mom's birthday.<br>
+                        His girlfriend got flowers "from him" last week. She loved them.<br>
+                        <strong>You should probably activate this.</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>PRICING TIERS</h2>
+            <p style="margin-bottom: 40px;">All prices include TaskRabbit credits, API costs, and our overhead.</p>
+            
+            <div class="pricing-tiers">
+                <div class="pricing-tier">
+                    <div class="tier-name">TEAM</div>
+                    <div class="tier-price">$2,997<span style="font-size: 20px;">/seat/mo</span></div>
+                    <div class="tier-description">Per employee, billed monthly</div>
+                    <ul class="tier-features">
+                        <li>All B2C services for each team member</li>
+                        <li>Team leaderboard dashboard</li>
+                        <li>Bulk TaskRabbit credits</li>
+                        <li>Service adoption tracking</li>
+                        <li>Monthly lock-in reports</li>
+                    </ul>
+                    <button class="tier-button" onclick="window.location.href='lokd-interest-form.html'">SELECT TEAM</button>
+                </div>
+
+                <div class="pricing-tier featured">
+                    <div class="tier-name">ENTERPRISE</div>
+                    <div class="tier-price">Custom</div>
+                    <div class="tier-description">Volume discounts, white-label available</div>
+                    <ul class="tier-features">
+                        <li>Everything in Team</li>
+                        <li>White-label LØKD branding</li>
+                        <li>Custom company merch (your logo on gray shirts)</li>
+                        <li>Advanced analytics & insights</li>
+                        <li>Dedicated account manager</li>
+                        <li>Priority TaskRabbit access</li>
+                        <li>Custom service integrations</li>
+                        <li>Lock-in culture consulting</li>
+                    </ul>
+                    <button class="tier-button" onclick="window.location.href='lokd-interest-form.html'">CONTACT SALES</button>
+                </div>
+            </div>
+
+            <p style="margin-top: 40px; font-size: 14px; opacity: 0.7;">
+                Your team is only as locked in as its weakest member.<br>
+                Eliminate the weak link. Automate everything.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
