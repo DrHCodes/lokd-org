@@ -297,6 +297,9 @@
         const submitBtn = document.getElementById('submitBtn');
         const successMessage = document.getElementById('successMessage');
 
+        // REPLACE THIS URL WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxStF_qwD-csJL6xruL_q7FO67RmEkLplwzfKZeuLhqldzQ2nk6JmXopvxDV-onXYGX/exec';
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -313,32 +316,27 @@
                 company: document.getElementById('company').value,
                 twitter: document.getElementById('twitter').value,
                 linkedin: document.getElementById('linkedin').value,
-                timestamp: new Date().toISOString(),
-                source: window.location.pathname
+                timestamp: new Date().toISOString()
             };
 
             try {
-                // Submit to your API endpoint
-                const response = await fetch('/api/submit-interest', {
+                // Submit to Google Sheets
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
+                    mode: 'no-cors', // Required for Google Apps Script
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(formData)
                 });
 
-                const result = await response.json();
+                // Hide form, show success
+                form.style.display = 'none';
+                successMessage.classList.add('show');
 
-                if (response.ok) {
-                    // Hide form, show success
-                    form.style.display = 'none';
-                    successMessage.classList.add('show');
-                } else {
-                    throw new Error(result.error || 'Submission failed');
-                }
             } catch (error) {
                 console.error('Submission error:', error);
-                alert('Something went wrong. Please try again or email us directly at hello@getlokd.com');
+                alert('Something went wrong. Please try again or email us directly at hello@lokd.org');
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'LØK IN NOW →';
             }
