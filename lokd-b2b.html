@@ -344,11 +344,23 @@
             font-size: 16px;
             cursor: pointer;
             font-family: 'Roboto Mono', monospace;
+            transition: all 0.3s ease;
         }
 
         .tier-button:hover {
             background: #FF4500;
             border-color: #FF4500;
+        }
+
+        .featured .tier-button {
+            border-color: #FF4500;
+            background: #FF4500;
+            color: #000;
+        }
+
+        .featured .tier-button:hover {
+            background: #00ff00;
+            border-color: #00ff00;
         }
 
         @media (max-width: 768px) {
